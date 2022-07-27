@@ -25,6 +25,10 @@
         "PlaybookName":  {
             "defaultValue":  "ArmisUpdateAlertStatus",
             "type":  "string"
+        },
+		"ArmisInstanceBaseURL":  {
+            "defaultValue":  "https://integration-crestdata.armis.com",
+            "type":  "string"
         }
     },
     "variables":  {
@@ -84,7 +88,7 @@
                         },
                         "Armis_Authentication":  {
                             "runAfter":  {
-                                "Condition_to_check_incident_status_is_equals_to_active_or_not":  [
+                                "Condition_to_check_incident_status_is_equals_to_New_or_not":  [
                                     "Succeeded"
                                 ]
                             },
@@ -108,8 +112,7 @@
                             "runAfter":  {
                                 "Armis_Alert_Status_Update_to_Portal":  [
                                     "Succeeded",
-                                    "Failed",
-                                    "TimedOut"
+                                    "Failed"
                                 ]
                             },
                             "else":  {
@@ -155,7 +158,6 @@
                             "runAfter":  {
                                 "Armis_Authentication":  [
                                     "Succeeded",
-                                    "TimedOut",
                                     "Failed"
                                 ]
                             },
@@ -187,7 +189,7 @@
                             },
                             "type":  "If"
                         },
-                        "Condition_to_check_incident_status_is_equals_to_active_or_not":  {
+                        "Condition_to_check_incident_status_is_equals_to_New_or_not":  {
                             "actions":  {
                                 "Initialize_Armis_Alert_Status_to_Unhandled_as_Incident_status_is_set_to_New":  {
                                     "runAfter":  {
@@ -201,14 +203,12 @@
                             },
                             "runAfter":  {
                                 "For_each":  [
-                                    "Succeeded",
-                                    "Failed",
-                                    "TimedOut"
+                                    "Succeeded"
                                 ]
                             },
                             "else":  {
                                 "actions":  {
-                                    "Condition_to_check_incident_status_is_equals_to_closed_or_not":  {
+                                    "Condition_to_check_incident_status_is_equals_to_Active_or_not":  {
                                         "actions":  {
                                             "Initialize_Armis_Alert_Status_to_Unhandled":  {
                                                 "runAfter":  {
@@ -224,7 +224,7 @@
                                         },
                                         "else":  {
                                             "actions":  {
-                                                "Condition":  {
+                                                "Condition_to_check_incident_status_is_equals_to_Closed_or_not":  {
                                                     "actions":  {
                                                         "Set_Armis_Alert_Status_to_Resolved":  {
                                                             "runAfter":  {
@@ -364,7 +364,7 @@
                                     {
                                         "name":  "ArmisAPIBaseURL",
                                         "type":  "string",
-                                        "value":  "https://integration-crestdata.armis.com"
+                                        "value":  "[parameters('ArmisInstanceBaseURL')]"
                                     }
                                 ]
                             },
